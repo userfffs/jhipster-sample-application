@@ -1,0 +1,100 @@
+// Сущности для работы с профилями сотрудников и связанными данными
+
+entity Region {
+    regionName String required
+}
+
+entity Country {
+    countryName String required
+}
+
+entity Location {
+    streetAddress String
+    postalCode String
+    city String required
+    stateProvince String
+}
+
+entity Department {
+    departmentName String required
+}
+
+entity Task {
+    title String required
+    description String
+}
+
+entity Employee {
+    firstName String required
+    lastName String required
+    email String required
+    phoneNumber String
+    hireDate Instant required
+    salary Long
+    commissionPct Long
+    jobTitle String // Добавлено для упрощения отображения должности
+}
+
+entity Job {
+    jobTitle String required
+    minSalary Long
+    maxSalary Long
+}
+
+entity JobHistory {
+    startDate Instant required
+    endDate Instant
+    language Language
+}
+
+enum Language {
+    FRENCH, ENGLISH, SPANISH, GERMAN, RUSSIAN
+}
+
+// Связи между сущностями
+
+relationship OneToOne {
+    Country{region} to Region
+}
+
+relationship OneToOne {
+    Location{country} to Country
+}
+
+relationship OneToOne {
+    Department{location} to Location
+}
+
+relationship ManyToMany {
+    Job{task(title)} to Task{job}
+}
+
+relationship OneToMany {
+    Department to Employee{department}
+    Employee to JobHistory{employee}
+}
+
+relationship ManyToOne {
+    Employee{manager} to Employee
+    JobHistory{job} to Job
+    JobHistory{department} to Department
+}
+
+// Пагинация
+paginate JobHistory, Employee with infinite-scroll
+paginate Job, Department with pagination
+
+// Использование DTO и MapStruct
+dto * with mapstruct
+
+// Настройка сервисов
+service all with serviceImpl except Employee, Job
+
+// Фильтрация
+filter * except Region, Country, Location
+
+// Аннотации для документации
+/**
+ * Микросервис для работы с профилями сотрудников.
+ * Включает управление сотрудниками, отделами, задачами и историей работы.
+ */
