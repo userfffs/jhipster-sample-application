@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (job(); as jobRef) {
+      <div>
+        <h2 data-cy="jobDetailsHeading">
+          <span jhiTranslate="jhipsterSampleApplicationApp.jhipsterSampleApplicationJob.detail.title">Job</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ jobRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterSampleApplicationApp.jhipsterSampleApplicationJob.jobTitle">Job Title</span></dt>
+          <dd>
+            <span>{{ jobRef.jobTitle }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterSampleApplicationApp.jhipsterSampleApplicationJob.minSalary">Min Salary</span></dt>
+          <dd>
+            <span>{{ jobRef.minSalary }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterSampleApplicationApp.jhipsterSampleApplicationJob.maxSalary">Max Salary</span></dt>
+          <dd>
+            <span>{{ jobRef.maxSalary }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterSampleApplicationApp.jhipsterSampleApplicationJob.task">Task</span></dt>
+          <dd>
+            @for (task of jobRef.tasks; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/jhipstersampleapplication/task', task.id, 'view']">{{ task?.title }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Назад</span>
+        </button>
+
+        <button type="button" [routerLink]="['/jhipstersampleapplication/job', jobRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Изменить</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
